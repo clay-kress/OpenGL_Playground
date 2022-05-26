@@ -1,15 +1,17 @@
 #include "list.h"
 
 // --> Initializes and deletes the array and array information
-void initList(List* list, int typeSize, int maxThings) {
+List* newList(int typeSize, int maxThings) {
+      List* list= malloc(sizeof(List));
       list->typeSize= typeSize;
       list->maxThings= maxThings;
       list->numThings= 0;
       list->array= (char*) malloc(list->typeSize * list->maxThings);
-      return;
+      return list;
 }
 void deleteList(List* list) {
       free(list->array);
+      free(list);
       return;
 }
 // --> Appends and removes elements from the end of the array
