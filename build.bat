@@ -1,2 +1,4 @@
 cls
-make run
+mkdir obj
+mkdir bin
+make build

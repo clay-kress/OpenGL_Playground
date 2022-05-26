@@ -17,8 +17,11 @@ lGLEW=-lglew32
 lGL=-lopengl32
 
 run: all
-	@echo === Running Minecraft.exe ==============================================
+	@echo === Running Repository =================================================
 	@$(BIN_F)/Minecraft.exe
+
+build: all
+	@echo === Building Repository ================================================
 
 all: $(BIN_F)/Minecraft.exe
 
