@@ -9,6 +9,13 @@ List* newList(int typeSize, int maxThings) {
       list->array= (char*) malloc(list->typeSize * list->maxThings);
       return list;
 }
+void initList(List* list, int typeSize, int maxThings) {
+      list->typeSize= typeSize;
+      list->maxThings= maxThings;
+      list->numThings= 0;
+      list->array= (char*) malloc(list->typeSize * list->maxThings);
+      return;
+}
 void deleteList(List* list) {
       free(list->array);
       free(list);

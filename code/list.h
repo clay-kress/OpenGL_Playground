@@ -12,6 +12,7 @@ typedef struct {
 
 // --> Initializes and deletes the array and array information
 List* newList(int typeSize, int maxThings);
+void initList(List* list, int typeSize, int maxThings);
 void deleteList(List* list);
 
 // --> Appends and removes elements from the end of the array
