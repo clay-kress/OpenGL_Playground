@@ -13,7 +13,8 @@ typedef struct {
 // --> Initializes and deletes the array and array information
 List* newList(int typeSize, int maxThings);
 void initList(List* list, int typeSize, int maxThings);
-void deleteList(List* list);
+void deleteList(List* list);                                            // For Heap initialized Lists
+void closeList(List* list);                                             // For Stack initialized Lists
 
 // --> Appends and removes elements from the end of the array
 void* list_push(List* list, const void* input);                         // *input is pushed to the array, returns a ptr to the element

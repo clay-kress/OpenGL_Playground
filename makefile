@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-std=c99 -O3 -Wfatal-errors -Wall -Wextra
 MFLAGS=-std=c99 -O3 -Wfatal-errors
 
-SRC_F=src
+SRC_F=code
 BIN_F=bin
 
 SRC_C=$(wildcard $(SRC_F)/*.c)

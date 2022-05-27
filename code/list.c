@@ -21,6 +21,10 @@ void deleteList(List* list) {
       free(list);
       return;
 }
+void closeList(List* list) {
+      free(list->array);
+      return;
+}
 // --> Appends and removes elements from the end of the array
 void* list_push(List* list, const void* input) {
       if (list->numThings == list->maxThings) {
