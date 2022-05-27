@@ -17,14 +17,14 @@ lGL=-lopengl32
 
 run: all
 	@echo === Running Repository =================================================
-	@$(BIN_F)/Minecraft.exe
+	@$(BIN_F)/yMain.exe
 
 build: all
 	@echo === Building Repository ================================================
 
-all: $(BIN_F)/Minecraft.exe
+all: $(BIN_F)/yMain.exe
 
-$(BIN_F)/Minecraft.exe: $(BIN_F)/main.o $(OBJ_C)
+$(BIN_F)/yMain.exe: $(BIN_F)/main.o $(OBJ_C)
 	$(CC) $(CFLAGS) -o $@ $^ $(LNK) $(lGLEW) $(lGLFW) $(lGL)
 
 $(BIN_F)/main.o: main.c $(DEP_C)
