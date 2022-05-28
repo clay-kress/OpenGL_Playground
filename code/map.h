@@ -29,5 +29,5 @@ void* map_getPtr(Map* map, const void* key);                            // Retur
 // --> Returns attributes of the map
 int map_keySize(Map* map);
 int map_valueSize(Map* map);
-int list_maxLen(Map* map);
+int map_maxLen(Map* map);
 int map_len(Map* map);
