@@ -5,6 +5,11 @@
 
 #include "list.h"
 
+/*** Map type data structure in C
+ * Use keys/values of any bytelength
+ * (DON'T FORGET THE TYPE OR THE LENGTH)
+ */
+
 typedef struct {
       List keys;
       List values;
@@ -27,7 +32,7 @@ void map_get(Map* map, const void* key, void* output);                  // *outp
 void* map_getPtr(Map* map, const void* key);                            // Returns a pointer to the value of the key
 
 // --> Returns attributes of the map
-int map_keySize(Map* map);
-int map_valueSize(Map* map);
-int map_maxLen(Map* map);
-int map_len(Map* map);
+int map_keySize(Map* map);                                              // Size of each key is returned
+int map_valueSize(Map* map);                                            // Size of each values is returned
+int map_maxLen(Map* map);                                               // Actual size of the arrays is returned
+int map_len(Map* map);                                                  // returns length of the map (amount of key value pairs)

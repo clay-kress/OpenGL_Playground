@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 
+/*** List type data structure in C
+ * Use values of any bytelength
+ * (DON'T FORGET THE TYPE OR THE LENGTH)
+ */
+
 typedef struct {
       char* array;
       int typeSize;
