@@ -1,5 +1,29 @@
 #include "list.h"
 
+void list_printInt(List* list) {
+      printf("[");
+      for (int i= 0; i < list->numThings; i++) {
+            int* value= (void*) &list->array[i * list->typeSize];
+            printf("%d", *value);
+            if (i != list->numThings - 1) {
+                  printf(", ");
+            }
+      }
+      printf("]");
+}
+
+void list_printString(List* list) {
+      printf("[");
+      for (int i= 0; i < list->numThings; i++) {
+            char** value= (void*) &list->array[i * list->typeSize];
+            printf("%s", *value);
+            if (i != list->numThings - 1) {
+                  printf(", ");
+            }
+      }
+      printf("]");
+}
+
 // --> Initializes and deletes the array and array information
 List* newList(int typeSize, int maxThings) {
       List* list= malloc(sizeof(List));

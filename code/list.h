@@ -10,6 +10,9 @@ typedef struct {
       int numThings;
 } List;
 
+void list_printInt(List* list);
+void list_printString(List* list);
+
 // --> Initializes and deletes the array and array information
 List* newList(int typeSize, int maxThings);
 void initList(List* list, int typeSize, int maxThings);
