@@ -1,27 +1,27 @@
 #include "list.h"
 
-void list_printInt(List* list) {
-      printf("[");
+void list_printInt(FILE* stream, List* list) {
+      fprintf(stream, "[");
       for (int i= 0; i < list->numThings; i++) {
             int* value= (void*) &list->array[i * list->typeSize];
-            printf("%d", *value);
+            fprintf(stream, "%d", *value);
             if (i != list->numThings - 1) {
-                  printf(", ");
+                  fprintf(stream, ", ");
             }
       }
-      printf("]");
+      fprintf(stream, "]");
 }
 
-void list_printString(List* list) {
-      printf("[");
+void list_printString(FILE* stream, List* list) {
+      fprintf(stream, "[");
       for (int i= 0; i < list->numThings; i++) {
             char** value= (void*) &list->array[i * list->typeSize];
-            printf("%s", *value);
+            fprintf(stream, "%s", *value);
             if (i != list->numThings - 1) {
-                  printf(", ");
+                  fprintf(stream, ", ");
             }
       }
-      printf("]");
+      fprintf(stream, "]");
 }
 
 // --> Initializes and deletes the array and array information

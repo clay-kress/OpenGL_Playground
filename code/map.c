@@ -1,10 +1,10 @@
 #include "map.h"
 
-void map_printIntString(Map* map) {
+void map_fprintf_IntString(FILE* stream, Map* map) {
       for (int i= 0; i < list_len(&map->keys); i++) {
             char** key= (void*) list_getPtr(&map->keys, i);
             int* value= (int*) list_getPtr(&map->values, i);
-            printf("%s: %d\n", *key, *value);
+            fprintf(stream, "%s: %d\n", *key, *value);
       }
 }
 

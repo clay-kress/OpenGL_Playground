@@ -10,8 +10,8 @@ typedef struct {
       int numThings;
 } List;
 
-void list_printInt(List* list);
-void list_printString(List* list);
+void list_fprintf_Int(FILE* stream, List* list);
+void list_fprintf_String(FILE* stream, List* list);
 
 // --> Initializes and deletes the array and array information
 List* newList(int typeSize, int maxThings);

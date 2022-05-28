@@ -10,7 +10,7 @@ typedef struct {
       List values;
 } Map;
 
-void map_printIntString(Map* map);
+void map_fprintf_IntString(FILE* stream, Map* map);
 
 // --> Initializes and deletes the array and array information
 Map* newMap(int keySize, int valueSize, int maxThings);
