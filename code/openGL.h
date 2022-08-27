@@ -1,12 +1,13 @@
 #pragma once
 #include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 
 #define GLEW_STATIC
-#include <GL\glew.h>
-#include <GL\glfw3.h>
+#include "lib/glew.h"
+#include "lib/glfw3.h"
 
 #include "list.h"
 #include "map.h"
