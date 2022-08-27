@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 #define GLEW_STATIC
-#include <GL\glew.h>
-#include <GL\glfw3.h>
+#include "lib/glew.h"
+#include "lib/glfw3.h"
 
 #include "code/list.h"
 #include "code/map.h"
