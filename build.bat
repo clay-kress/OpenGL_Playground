@@ -1,2 +1,2 @@
 cls
-make build
+mingw32-make build

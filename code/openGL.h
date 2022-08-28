@@ -6,8 +6,8 @@
 #include <math.h>
 
 #define GLEW_STATIC
-#include "lib/glew.h"
-#include "lib/glfw3.h"
+#include "../lib/glew.h"
+#include "../lib/glfw3.h"
 
 #include "list.h"
 #include "map.h"
