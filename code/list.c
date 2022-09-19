@@ -42,7 +42,7 @@ void initList(List* list, int typeSize, int maxThings) {
 }
 void deleteList(List* list) {
       free(list->array);
-      free(list);//fff
+      free(list);
       return;
 }
 void closeList(List* list) {

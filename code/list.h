@@ -12,7 +12,7 @@ typedef struct {
       char* array;
       int typeSize;
       int maxThings;
-      int numThings;//ff
+      int numThings;
 } List;
 
 void list_fprintf_Int(FILE* stream, List* list);
