@@ -1,68 +1,117 @@
-/***********************************************************************/
-/* Copyright (c) 2022 Clay Kress                                       */
-/*                                                                     */
-/* This file is part of VioletGE.                                      */
-/* VioletGE is free software: you can redistribute it and/or modify it */
-/* under the terms of the GNU General Public License as published by   */
-/* the Free Software Foundation, either version 3 of the License, or   */
-/* (at your option) any later version.                                 */
-/*                                                                     */
-/* VioletGE is distributed in the hope that it will be useful,         */
-/* but WITHOUT ANY WARRANTY; without even the implied warranty         */
-/* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             */
-/*                                                                     */
-/* See the GNU General Public License for more details.                */
-/*                                                                     */
-/* You should have received a copy of the GNU General Public License   */
-/* along with VioletGE. If not, see <https://www.gnu.org/licenses/>.   */
-/*                                                                     */
-/***********************************************************************/
+/* Sandbox (Cubed) by Clay Kress
+ * Helpful Sources:
+ *     OpenGL (Framebuffers, Cubemaps): https://learnopengl.com/
+ *     Perlin noise for clouds: https://rtouti.github.io/graphics/perlin-noise-algorithm
+ *
+ * Inspired by (but not copied from): https://github.com/jdah/minecraft-weekend/tree/master
+ *
+ */
 
-/*****************************************************************************************************************************************************************/
+#ifdef USEGLEW
+#include "src/lib/glew32.h"
+#else
+#include <GL/gl.h>
+#endif
+#include "src/lib/glfw3.h"
+
+#include <stdbool.h>
+#include <string.h>
+#include <math.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 
-#define GLEW_STATIC
-#include "lib/glew.h"
-#include "lib/glfw3.h"
+#include "src/linAlg.h"
+#include "src/world.h"
+#include "src/camera.h"
+#include "src/window.h"
+#include "src/shader.h"
 
-#include "code/list.h"
-#include "code/map.h"
-#include "code/clag.h"
-#include "code/openGL.h"
+#define DEFAULT_WIDTH 960
+#define DEFAULT_HEIGHT 540
+#define DEFAULT_NAME "Application"
 
-#define WIDTH 1440
-#define HEIGHT 810
+int main(int argc, char* argv[]) {
+    printf("%s\n", "Hello, World!");
 
-float buf[9]= {
-     -0.5, -0.5, 0.0,
-      0.5, -0.5, 0.0,
-      0.0,  0.5, 0.0
-};
-unsigned int index[3]= {
-      0, 1, 2
-};
+    bool vsync= true, fullscreen= false;
 
-int main(int argc, char** argv) {
-      printf("Hello, World!\n");
-      stream= stdout;
-      Window w;
-      window_open(&w, "Minecraft", WIDTH, HEIGHT);
-      window_setIcon(&w, "icon.png");
-      VideoShader s;
-      videoShader_load(&s, "shaders/defaultShader.vs.glsl", "shaders/defaultShader.fs.glsl", "Basic Shader");
-      videoShader_bind(&s);
-      VertexBuffer vb;
-      IndexBuffer ib;
-      VertexArrayObject vao;
-      vertexBuffer_init(&vb, buf, 3, 3);
-      vertexArrayObject_init(&vao, 3);
-      vertexArrayObject_addElement(&vao, 3);
-      indexBuffer_init(&ib, index, 3);
-      do {
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
-      } while (window_update(&w));
-      window_delete(&w);
-      glfwTerminate();
-      return EXIT_SUCCESS;
+    float mouseSensitivity= 0.3;
+    float keyboardSensitivity= 5;
+
+    float horizontalAngle= -PI/2.0, verticalAngle= PI/8.0;
+    vec3 startPos= {{36.0, 15.0, 32.0}};
+
+    Window window= createWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_NAME, vsync, fullscreen);
+    window_makeCurrentContext(&window);
+
+    World world= createWorld();
+
+    Camera player= createCamera(&window, &world);
+    camera_updateLens(&player, 75, 0.01, 1000);
+    camera_updatePlayerController(&player, mouseSensitivity, keyboardSensitivity, horizontalAngle, verticalAngle, startPos, true);
+
+    double startTime= glfwGetTime(), lastTime= glfwGetTime();
+    double endTime= startTime;
+    int frameCount= 0;
+
+    double deltaTime= 1, timeElapsed= 0;
+    while (!camera_update(&player, deltaTime)) {
+        deltaTime= endTime-startTime;
+        timeElapsed += deltaTime;
+        if (frameCount == 120) {
+            double currentTime= glfwGetTime();
+            double timeSinceLastPrint= currentTime-lastTime;
+            lastTime= currentTime;
+            //printf("Time Elapsed= %f\n    SPF= %f, FPS= %f\n", timeElapsed, timeSinceLastPrint/frameCount, 1.0/(timeSinceLastPrint/frameCount));
+            frameCount= 0;
+        }
+        frameCount++;
+
+        world_renderPrepare(&world, deltaTime, player.position);
+        world_render(&world);
+        camera_finish(&player);
+
+        startTime= endTime; // Previous endTime.
+        endTime= glfwGetTime();
+    }
+    glfwTerminate();
+    return EXIT_SUCCESS;
 }
+
+// TODO: Fix player raycasting for block breaking/placing
+//        if (mouse1Pressed && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
+//            mouse1Pressed= false;
+//        }
+//        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS && !mouse1Pressed) {
+//            mouse1Pressed= true;
+//            vec3 blockLocation= {0};
+//            vec3 rayPos= pos;
+//            for (int i= 0; i < 6; i++) {
+//                if (round(rayPos.x) >= 0 && round(rayPos.x) < 16 && round(rayPos.y) >= 0 && round(rayPos.y) < 16 && round(rayPos.z) >= 0 && round(rayPos.z) < 16) {
+//                    if (blocks[(unsigned int) round(rayPos.x)][(unsigned int) round(rayPos.y)][(unsigned int) round(rayPos.z)] != 0) {
+//                        blockLocation= vec3_round(rayPos);
+//                        blocks[(unsigned int) round(rayPos.x)][(unsigned int) round(rayPos.y)][(unsigned int) round(rayPos.z)]= 0;
+//                        break;
+//                    }
+//                }
+//                float nearestPlaneAngle= fmax(
+//                    fmax(fmax(vec3_dot(focus, (vec3) { 1.0, 0.0, 0.0}), vec3_dot(focus, (vec3) {0.0, 1.0, 0.0})), vec3_dot(focus, (vec3) {0.0, 0.0, 1.0})),
+//                    fmax(fmax(vec3_dot(focus, (vec3) {-1.0, 0.0, 0.0}), vec3_dot(focus, (vec3) {0.0,-1.0, 0.0})), vec3_dot(focus, (vec3) {0.0, 0.0,-1.0})));
+//                rayPos= vec3_add(rayPos, vec3_multiply(focus, 0.5/nearestPlaneAngle));
+//            }
+//            Vertex* cubeV= blockVertexPtr[(int) blockLocation.x][(int) blockLocation.y][(int) blockLocation.z];
+//            unsigned int* cubeI= blockIndexPtr[(int) blockLocation.x][(int) blockLocation.y][(int) blockLocation.z];
+//            for (int i= 0; i < sizeof(cubeVertices)/sizeof(Vertex); i++) {
+//                cubeV[i]= (Vertex) {0};
+//            }
+//#ifdef WIRE_FRAME
+//            for (int i= 0; i < sizeof(wireFrameIndices)/sizeof(unsigned int); i++) {
+//                cubeI[i]= (unsigned int) {0};
+//            }
+//#else
+//            for (int i= 0; i < (sizeof(cubeIndices)/sizeof(unsigned int)); i++) {
+//                cubeI[i]= (unsigned int) {0};
+//            }
+//#endif
+//        }

@@ -1,54 +1,47 @@
-# /***********************************************************************/
-# /* Copyright (c) 2022 Clay Kress                                       */
-# /*                                                                     */
-# /* This file is part of VioletGE.                                      */
-# /* VioletGE is free software: you can redistribute it and/or modify it */
-# /* under the terms of the GNU General Public License as published by   */
-# /* the Free Software Foundation, either version 3 of the License, or   */
-# /* (at your option) any later version.                                 */
-# /*                                                                     */
-# /* VioletGE is distributed in the hope that it will be useful,         */
-# /* but WITHOUT ANY WARRANTY; without even the implied warranty         */
-# /* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             */
-# /*                                                                     */
-# /* See the GNU General Public License for more details.                */
-# /*                                                                     */
-# /* You should have received a copy of the GNU General Public License   */
-# /* along with VioletGE. If not, see <https://www.gnu.org/licenses/>.   */
-# /*                                                                     */
-# /***********************************************************************/
-
+EXE=final
 CC=gcc
 CFLAGS=-std=c99 -O3 -Wfatal-errors -Wall -Wextra
-MFLAGS=-std=c99 -O3 -Wfatal-errors
+MAINFLAGS=-std=c99 -O3 -Wfatal-errors
 
-SRC_F=code
+#  MinGW
+ifeq "$(OS)" "Windows_NT"
+CFLG=-std=c99 -O3 -Wfatal-errors -Wall -DUSEGLEW -L.
+LIBS=-lglew32 -lglfw3 -lopengl32
+CLEAN=del *.exe bin\*.o
+else
+#  OSX
+ifeq "$(shell uname)" "Darwin"
+CFLG=-O3 -Wall -Wno-deprecated-declarations -DRES=2
+LIBS=-framework OpenGL
+#  Linux/Unix/Solaris
+else
+CFLG=-O3 -Wall
+LIBS= -lGL -lm -lglfw
+endif
+#  OSX/Linux/Unix/Solaris
+CLEAN=rm -f final bin/*.o
+endif
+
+SRC_F=src
 BIN_F=bin
 
 SRC_C=$(wildcard $(SRC_F)/*.c)
 DEP_C=$(wildcard $(SRC_F)/*.h)
 OBJ_C=$(patsubst $(SRC_F)/%.c, $(BIN_F)/%.o, $(SRC_C))
 
-LNK=-Llib
+executable: $(EXE)
 
-lGLFW=-lglfw3
-lGLEW=-lglew32
-lGL=-lopengl32
+run: $(EXE)
+	$(EXE).exe
 
-run: all
-	@echo === Running Repository =================================================
-	@$(BIN_F)/yMain.exe
-
-build: all
-	@echo === Building Repository ================================================
-
-all: $(BIN_F)/yMain.exe
-
-$(BIN_F)/yMain.exe: $(BIN_F)/main.o $(OBJ_C)
-	$(CC) $(CFLAGS) -o $@ $^ $(LNK) $(lGLEW) $(lGLFW) $(lGL)
+$(EXE): $(BIN_F)/main.o $(OBJ_C)
+	$(CC) $(CFLG) -o $@ $^ $(LIBS)
 
 $(BIN_F)/main.o: main.c $(DEP_C)
-	$(CC) $(MFLAGS) -c $< -o $@
+	$(CC) $(CFLG) -c $< -o $@
 
 $(BIN_F)/%.o: $(SRC_F)/%.c $(SRC_F)/%.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLG) -c $< -o $@
+
+clean:
+	$(CLEAN)
