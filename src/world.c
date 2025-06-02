@@ -168,8 +168,8 @@ void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection) {
 unsigned int world_getBlock(World* world, vec3 coordinate) {
     vec3 chunk= getChunkCoordFromWorldCoord(coordinate);
     vec3 withinChunk= vec3_floor(getPlayerPosWithinChunk(coordinate));
-    printf("FEET: posWithinChunk= {%f, %f, %f}, currentChunkCoord= {%f, %f, %f}\n", withinChunk.x, withinChunk.y, withinChunk.z, chunk.x, chunk.y, chunk.z);
 
+    if ((unsigned int) chunk.x >= WORLD_SIZE || (unsigned int) chunk.y >= WORLD_HEIGHT || (unsigned int) chunk.z >= WORLD_SIZE) return bt_Air;
     return world->chunkArray[(unsigned int) chunk.x][(unsigned int) chunk.y][(unsigned int) chunk.z].blockData[(unsigned int) CHUNK_DIM*CHUNK_DIM*(unsigned int)withinChunk.x + CHUNK_DIM*(unsigned int)withinChunk.y + (unsigned int)withinChunk.z];
 }
 
@@ -179,9 +179,9 @@ ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos) {
 
 static vec3 getPlayerPosWithinChunk(vec3 position) {
     vec3 ans;
-    ans.x= position.x >= 0 ? ((int) position.x % CHUNK_DIM) + (position.x - (int) position.x) : 15 + ((int) position.x % CHUNK_DIM) + (position.x - (int) position.x);
-    ans.y= position.y >= 0 ? ((int) position.y % CHUNK_DIM) + (position.y - (int) position.y) : 15 + ((int) position.y % CHUNK_DIM) + (position.y - (int) position.y);
-    ans.z= position.z >= 0 ? ((int) position.z % CHUNK_DIM) + (position.z - (int) position.z) : 15 + ((int) position.z % CHUNK_DIM) + (position.z - (int) position.z);
+    ans.x= position.x >= 0 ? ((int) position.x % CHUNK_DIM) + (position.x - (int) position.x) : 16 + ((int) ((int) trunc(position.x) % CHUNK_DIM) + (position.x - trunc(position.x)));
+    ans.y= position.y >= 0 ? ((int) position.y % CHUNK_DIM) + (position.y - (int) position.y) : 16 + ((int) ((int) trunc(position.y) % CHUNK_DIM) + (position.y - trunc(position.y)));
+    ans.z= position.z >= 0 ? ((int) position.z % CHUNK_DIM) + (position.z - (int) position.z) : 16 + ((int) ((int) trunc(position.z) % CHUNK_DIM) + (position.z - trunc(position.z)));
     return (ans);
 }
 
