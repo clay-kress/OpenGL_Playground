@@ -7,7 +7,7 @@
 #include "stb_image.h"
 
 #define WORLD_SIZE 10
-#define WORLD_HEIGHT 10
+#define WORLD_HEIGHT 30
 #define WORLD_GRAVITY 0.49
 #define WORLD_START_TIME 0 // [0-1]
 #define DEFAULT_DAYLIGHT_CYCLE (60*10) // seconds= 60*minutes
@@ -20,6 +20,7 @@
 typedef struct {
     // Terrain Data
     ChunkMesh chunkArray[WORLD_SIZE][WORLD_HEIGHT][WORLD_SIZE]; // May need to replace with heap allocated memory if world gets too big
+    int playerWorldOffsetX, playerWorldOffsetY, playerWorldOffsetZ; // Translates the chunkArray around the player so the player is always at the center of the chunkArray
     // Sun data
     Vertex sunVertices[24];
     unsigned int sunVAO, sunVBO, sunIBO;
@@ -28,10 +29,10 @@ typedef struct {
     float dayLength; // Length of (full) day in seconds
     float timeElapsed;
     // Texture data (blockAtlas & starMap)
-    int blockAtlasX, blockAtlasY, blockAtlasChannels;
+    int blockAtlasX, blockAtlasY, blockAtlasChannels; // Block Atlas image parameters spit out by the image loader
     unsigned char* blockAtlas;
     unsigned int glBlockAtlas;
-    int starMapX, starMapY, starMapChannels;
+    int starMapX, starMapY, starMapChannels; // Block Atlas image parameters spit out by the image loader
     unsigned char* starMap;
     unsigned char* northStarMap;
     unsigned int glStarMap; // Cubemap
@@ -42,6 +43,6 @@ void world_renderPrepare(World* world, double deltaTime, vec3 playerPos);
 void world_render(World* world);
 void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection, int radius);
 unsigned int world_getBlock(World* world, vec3 coordinate);
-ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos);
+//ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos);
 
 #endif

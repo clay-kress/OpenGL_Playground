@@ -65,14 +65,17 @@ World createWorld(void) {
     glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
     // Generate chunks
+    world.playerWorldOffsetX= WORLD_SIZE/2;
+    world.playerWorldOffsetY= WORLD_HEIGHT/2;
+    world.playerWorldOffsetZ= WORLD_SIZE/2;
     for (int i= 0; i < WORLD_SIZE; i++) {
         for (int j= WORLD_HEIGHT-1; j >= 0; j--) {
             for (int k= 0; k < WORLD_SIZE; k++) {
                 // Do the most basic possible interesting terrain generation
-                int blockTemplate[16][16][16];
-                for (int x= 0; x < 16; x++) {
-                    for (int y= 15; y >= 0; y--) {
-                        for (int z= 0; z < 16; z++) {
+                int blockTemplate[CHUNK_DIM][CHUNK_DIM][CHUNK_DIM];
+                for (int x= 0; x < CHUNK_DIM; x++) {
+                    for (int y= CHUNK_DIM-1; y >= 0; y--) {
+                        for (int z= 0; z < CHUNK_DIM; z++) {
                             vec3 worldCoord= getWorldCoordFromChunkCoord((vec3) {{i, j-2, k}}, x, y, z);
                             // Add dirt
                             blockTemplate[x][y][z]= worldCoord.y < 5 * sin(RAD(7*worldCoord.x)) * cos(RAD(7*worldCoord.z)) ? bt_Dirt : 0;
@@ -81,9 +84,9 @@ World createWorld(void) {
                                 blockTemplate[x][y][z]= bt_Stone;
                             }
                             // Convert dirt to grass under certain conditions
-                            if ((y != 15 && blockTemplate[x][y][z] == bt_Dirt && blockTemplate[x][y+1][z] == 0) ||
-                                (y == 15 && blockTemplate[x][y][z] == bt_Dirt && j == WORLD_HEIGHT-1) ||
-                                (y == 15 && blockTemplate[x][y][z] == bt_Dirt && j != WORLD_HEIGHT-1 && world.chunkArray[i][j+1][k].blockData[CHUNK_DIM*CHUNK_DIM*x + z] == 0)) {
+                            if ((y != CHUNK_DIM-1 && blockTemplate[x][y][z] == bt_Dirt && blockTemplate[x][y+1][z] == 0) ||
+                                (y == CHUNK_DIM-1 && blockTemplate[x][y][z] == bt_Dirt && j == WORLD_HEIGHT-1) ||
+                                (y == CHUNK_DIM-1 && blockTemplate[x][y][z] == bt_Dirt && j != WORLD_HEIGHT-1 && world.chunkArray[i][j+1][k].blockData[CHUNK_DIM*CHUNK_DIM*x + z] == 0)) {
                                 blockTemplate[x][y][z]= bt_Grass;
                             }
                         }
@@ -133,11 +136,6 @@ void world_render(World* world) {
     }
 }
 
-// TODO: Complete
-void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection, int radius) {
-    return;
-}
-
 unsigned int world_getBlock(World* world, vec3 coordinate) {
     vec3 chunk= getChunkCoordFromWorldCoord(coordinate);
     vec3 withinChunk= vec3_floor(getPlayerPosWithinChunk(coordinate));
@@ -146,9 +144,14 @@ unsigned int world_getBlock(World* world, vec3 coordinate) {
     return world->chunkArray[(unsigned int) chunk.x][(unsigned int) chunk.y][(unsigned int) chunk.z].blockData[(unsigned int) CHUNK_DIM*CHUNK_DIM*(unsigned int)withinChunk.x + CHUNK_DIM*(unsigned int)withinChunk.y + (unsigned int)withinChunk.z];
 }
 
-ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos) {
-    return &world->chunkArray[(int) chunkPos.x][(int) chunkPos.y][(int) chunkPos.z];
+// TODO: Complete
+void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection, int radius) {
+    return;
 }
+
+//ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos) {
+//    return &world->chunkArray[(int) chunkPos.x][(int) chunkPos.y][(int) chunkPos.z];
+//}
 
 static vec3 getPlayerPosWithinChunk(vec3 position) {
     vec3 ans;
