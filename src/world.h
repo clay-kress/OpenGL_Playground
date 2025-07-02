@@ -40,7 +40,7 @@ typedef struct {
 World createWorld(void);
 void world_renderPrepare(World* world, double deltaTime, vec3 playerPos);
 void world_render(World* world);
-void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection);
+void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection, int radius);
 unsigned int world_getBlock(World* world, vec3 coordinate);
 ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos);
 

@@ -39,6 +39,7 @@ Camera createCamera(Window* window, World* world) {
     cam.verticalVelocity= 0;
     cam.playerHeight= 1.9;
     cam.jumpStrength= 8;
+    cam.reach= 5;
 
     glfwSetScrollCallback(window->windowHandle, scrollWheelCallback);
     glfwSetMouseButtonCallback(window->windowHandle, mouseButtonCallback);
@@ -168,7 +169,7 @@ bool camera_update(Camera* cam, double deltaTime) {
     // Do mouse presses and block breaking
     // TODO: Switch to event system for mouse click
     if (mouse1Raised) {
-        world_blockBreak(cam->world, cam->position, cam->focus);
+        world_blockBreak(cam->world, cam->position, cam->focus, cam->reach);
         mouse1Raised= false;
     }
 

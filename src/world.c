@@ -134,35 +134,8 @@ void world_render(World* world) {
 }
 
 // TODO: Complete
-void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection) {
-//    facingDirection= vec3_normalize(facingDirection);
-//    vec3 currentChunkCoord= getChunkCoordFromWorldCoord(playerPos);
-//    vec3 posWithinChunk= getPlayerPosWithinChunk(playerPos);
-//    printf("playerPos= {%f, %f, %f}\n", playerPos.x, playerPos.y, playerPos.z);
-//    printf("posWithinChunk= {%f, %f, %f}, currentChunkCoord= {%f, %f, %f}\n", posWithinChunk.x, posWithinChunk.y, posWithinChunk.z, currentChunkCoord.x, currentChunkCoord.y, currentChunkCoord.z);
-//    if (currentChunkCoord.x >= 0 && currentChunkCoord.y >= 0 && currentChunkCoord.z >= 0 && currentChunkCoord.x < WORLD_SIZE && currentChunkCoord.y < WORLD_SIZE && currentChunkCoord.z < WORLD_SIZE) {
-//        ChunkMesh* chunk= world_getChunkMeshFromChunkCoords(world, currentChunkCoord);
-//        vec3 brokenBlockPos= (vec3) {{-1, -1, -1}};
-//        for (int x= 0; x < CHUNK_DIM; x++) {
-//            for (int y= 0; y < CHUNK_DIM; y++) {
-//                for (int z= 0; z < CHUNK_DIM; z++) {
-//                    if (chunk->blockData[CHUNK_DIM*CHUNK_DIM*x + CHUNK_DIM*y + z] == 0) {
-//                        continue;
-//                    } else {
-//                        // Test if the ray intersects the block
-//                        vec3 blockLocationWithinChunk= (vec3) {{x, y, z}};
-//                        float playerDistanceFromBlock= vec3_length(vec3_sub(blockLocationWithinChunk, posWithinChunk));
-//                        vec3 rayToBlockDistance= vec3_add(playerPos, vec3_scale(facingDirection, playerDistanceFromBlock));
-//                        printf("rayToBlockDistance= %f, %f, %f\n", rayToBlockDistance.x, rayToBlockDistance.y, rayToBlockDistance.z);
-//                        if (rayToBlockDistance.x >= x && rayToBlockDistance.z >= z && rayToBlockDistance.z >= z &&
-//                            rayToBlockDistance.x < x+1 && rayToBlockDistance.y < y+1 && rayToBlockDistance.z < z+1) {
-//                                printf("Block hit: %d, %d, %d\n", x, y, z);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection, int radius) {
+    return;
 }
 
 unsigned int world_getBlock(World* world, vec3 coordinate) {

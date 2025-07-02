@@ -42,6 +42,7 @@ typedef struct {
     float verticalVelocity;
     float playerHeight;
     float jumpStrength;
+    int reach;
     bool doPhysics;
 } Camera;
 
