@@ -33,6 +33,18 @@ void printVec4(const char* name, vec4 vec) {
     return;
 }
 
+void printVec3(const char* name, vec3 vec) {
+    printf("%s {", name);
+    for (int i= 0; i < 3; i++) {
+        printf("%f", vec.vec[i]);
+        if (i != 2) {
+            printf(", ");
+        }
+    }
+    printf("}\n");
+    return;
+}
+
 vec3 vec3_floor(vec3 v) {
     return (vec3) {{floor(v.x), floor(v.y), floor(v.z)}};
 }

@@ -59,6 +59,7 @@ typedef union {
 
 void printMat4(const char* name, mat4 m);
 void printVec4(const char* name, vec4 vec);
+void printVec3(const char* name, vec3 vec);
 
 vec3 vec3_floor(vec3 v);
 vec3 vec3_ceil(vec3 v);

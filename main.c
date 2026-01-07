@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "src/linAlg.h"
+#include "src/data/linAlg.h"
 #include "src/world.h"
 #include "src/camera.h"
 #include "src/window.h"

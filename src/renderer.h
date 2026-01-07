@@ -1,7 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "list.h"
+#include "data/list.h"
 
 typedef void (*RenderFunction)(void*); // Pass object to render via void* argument
 

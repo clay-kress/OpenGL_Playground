@@ -4,7 +4,7 @@
 #include "chunkMesh.h"
 #include "shader.h"
 
-#include "stb_image.h"
+#include "data/stb_image.h"
 
 #define WORLD_SIZE 10
 #define WORLD_HEIGHT 30
@@ -43,6 +43,6 @@ void world_renderPrepare(World* world, double deltaTime, vec3 playerPos);
 void world_render(World* world);
 void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection, int radius);
 unsigned int world_getBlock(World* world, vec3 coordinate);
-//ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos);
+ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos);
 
 #endif

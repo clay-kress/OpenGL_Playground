@@ -5,6 +5,7 @@
 static vec3 getPlayerPosWithinChunk(vec3 position);
 static vec3 getWorldCoordFromChunkCoord(vec3 chunkCoord, int x, int y, int z);
 static vec3 getChunkCoordFromWorldCoord(vec3 position);
+static int getBlockTypeIndex(vec3 playerChunkCoord);
 
 World createWorld(void) {
     World world;
@@ -146,12 +147,34 @@ unsigned int world_getBlock(World* world, vec3 coordinate) {
 
 // TODO: Complete
 void world_blockBreak(World* world, vec3 playerPos, vec3 facingDirection, int radius) {
+    int distanceCount= 0;
+    int blockType= 0;
+
+    ChunkMesh* mesh= NULL;
+    vec3 playerChunkCoord;
+
+    while (blockType == 0 && distanceCount <= 100*radius) {
+        vec3 chunk= getChunkCoordFromWorldCoord(playerPos);
+        mesh= world_getChunkMeshFromChunkCoords(world, chunk);
+        playerChunkCoord= getPlayerPosWithinChunk(playerPos);
+        blockType= mesh->blockData[getBlockTypeIndex(playerChunkCoord)];
+        printf("BlockType= %d, %d\n", blockType, distanceCount);
+
+        playerPos= vec3_add(playerPos, vec3_scale(facingDirection, .01));
+        distanceCount += 1;
+    }
+
+    if (mesh != NULL) {
+        mesh->blockData[getBlockTypeIndex(playerChunkCoord)]= 0;
+        mesh->dirtyFlag= true;
+    }
+
     return;
 }
 
-//ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos) {
-//    return &world->chunkArray[(int) chunkPos.x][(int) chunkPos.y][(int) chunkPos.z];
-//}
+ChunkMesh* world_getChunkMeshFromChunkCoords(World* world, vec3 chunkPos) {
+    return &world->chunkArray[(int) chunkPos.x][(int) chunkPos.y][(int) chunkPos.z];
+}
 
 static vec3 getPlayerPosWithinChunk(vec3 position) {
     vec3 ans;
@@ -167,4 +190,8 @@ static vec3 getWorldCoordFromChunkCoord(vec3 chunkCoord, int x, int y, int z) {
 
 static vec3 getChunkCoordFromWorldCoord(vec3 position) {
     return vec3_floor((vec3) {{(position.x)/CHUNK_DIM, (position.y)/CHUNK_DIM + 2, (position.z)/CHUNK_DIM}});
+}
+
+static int getBlockTypeIndex(vec3 playerChunkCoord) {
+    return CHUNK_DIM*CHUNK_DIM*(int)playerChunkCoord.x + CHUNK_DIM*(int)playerChunkCoord.y + (int)playerChunkCoord.z;
 }

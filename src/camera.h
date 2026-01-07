@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "linAlg.h"
+#include "data/linAlg.h"
 
 #include "window.h"
 #include "shader.h"
